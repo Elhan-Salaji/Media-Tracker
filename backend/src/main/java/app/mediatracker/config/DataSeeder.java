@@ -7,8 +7,6 @@ import app.mediatracker.feature.user.repo.UserRepository;
 import app.mediatracker.seed.DemoMediaData;
 import app.mediatracker.seed.DemoUserData;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.bson.types.ObjectId;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +23,7 @@ import java.util.List;
 @Configuration
 public class DataSeeder {
     @Bean
-    CommandLineRunner seedDatabase(UserRepository userRepository, UserLibraryEntryRepository userLibraryEntryRepository, ObjectMapper objectMapper, DemoUserData userTestDataLoader, DemoMediaData mediaTestDataLoader) {
+    CommandLineRunner seedDatabase(UserRepository userRepository, UserLibraryEntryRepository userLibraryEntryRepository, DemoUserData userTestDataLoader, DemoMediaData mediaTestDataLoader) {
         return args -> {
             //only if User Database is empty!
             if (userRepository.count() == 0) {
