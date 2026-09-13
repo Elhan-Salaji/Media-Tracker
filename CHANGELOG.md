@@ -14,6 +14,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - **Configurable backend address:** The frontend reads the backend address from `VITE_API_BASE_URL` instead of eight hardcoded `http://localhost:8080` URLs. `frontend/.env.example` documents the variable, and the frontend image takes it as a build argument (#3).
 
 ### Changed
+- **Backend image build:** The build stage runs the Maven Wrapper on `eclipse-temurin:21-jdk-alpine` instead of the `maven` image, like CI, and Dependabot ignores major updates of the Docker base images (#79).
 - **Node 24:** The frontend image and the frontend CI jobs build on Node 24, the current LTS line. The image used Node 20, which reached its end of life in April 2026, while CI used Node 22 (#58).
 - **Squash merges:** Pull requests reach `develop` as one squash commit each, and release merges from `develop` into `main` keep a merge commit. Pull request titles follow the commit format, and the Commit Check accepts the pull request number GitHub appends to a squash subject (#70).
 - **CI/CD:** Replaced the GitLab pipeline with **GitHub Actions** (`.github/workflows/ci.yml`) after the move of the repository. The job order stays the same: Lint -> Test -> Build -> Package (#1).
