@@ -14,8 +14,11 @@ VALID_TYPES = (
     "docs", "refactor", "style", "remove", "revert", "release", "init",
 )
 
+# A branch commit ends with the issue number. A squash commit on develop gets the
+# pull request number appended by GitHub, and a Dependabot squash commit carries
+# the pull request number alone.
 COMMIT_PATTERN = re.compile(
-    r"^(" + "|".join(VALID_TYPES) + r"): .+ #\d+$",
+    r"^(" + "|".join(VALID_TYPES) + r"): .+ (#\d+|#\d+ \(#\d+\)|\(#\d+\))$",
     re.IGNORECASE,
 )
 EXEMPT_PATTERN = re.compile(r'^(Merge |Revert "|init(ial)? (commit|repo))', re.IGNORECASE)
@@ -62,7 +65,7 @@ def main() -> None:
         for subject in invalid:
             print(f"  ✗ {subject}")
         print()
-        print("Format:   <type>: <description> #<issue>")
+        print("Format:   <type>: <description> #<issue>, on develop with \" (#<pull request>)\" appended")
         print("Example:  fix: retry the initial search after login #17")
         sys.exit(1)
 
