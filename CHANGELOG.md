@@ -6,6 +6,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-09-13
+
 ### Added
 - **Contribution workflow:** `CONTRIBUTING.md` writes down how the team works: issue first, a `type/short-description-#issue` branch off `develop`, one pushed commit at a time, a pull request per change. An issue template and a pull request template carry the formats (#9).
 - **Commit Check:** A new workflow runs `.github/scripts/check_commits.py` on every pull request and every push to `develop` and `main`, and fails on a commit that breaks `<type>: <description> #<issue>`. Merge commits, reverts and the commits from before the check are exempt (#9).
@@ -107,7 +109,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Project skeleton: the Spring Boot backend with Maven Wrapper and entry point under the base package `app.mediatracker`, a base `application.yml`, and the directory layout for backend, frontend, Docker and documentation.
 - The first architecture decision record, `docs/architecture/ADRs/ADR 01.md`.
 
-[Unreleased]: https://github.com/Elhan-Salaji/Media-Tracker/compare/1.0.0...HEAD
+[Unreleased]: https://github.com/Elhan-Salaji/Media-Tracker/compare/1.1.0...HEAD
+[1.1.0]: https://github.com/Elhan-Salaji/Media-Tracker/compare/1.0.0...1.1.0
 [1.0.0]: https://github.com/Elhan-Salaji/Media-Tracker/compare/0.1.1...1.0.0
 [0.1.1]: https://github.com/Elhan-Salaji/Media-Tracker/compare/0.1.0...0.1.1
 [0.1.0]: https://github.com/Elhan-Salaji/Media-Tracker/compare/0.0.1...0.1.0
