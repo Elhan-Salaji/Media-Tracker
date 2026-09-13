@@ -5,7 +5,7 @@ import UserPageContent from "../components/UserPageContent.tsx";
 import Footer from "../components/Footer.tsx";
 import type { UserMediaSortOption, UserMediaStatus, UserPageResponse } from "../components/types.ts";
 import defaultAvatar from "../assets/profile-picture.png";
-import {useAuth} from "../service/AuthContext.tsx";
+import {useAuth} from "../service/useAuth.ts";
 import {apiUrl} from "../service/api.ts";
 
 /**
@@ -63,7 +63,7 @@ export default function UserPage() {
                 setMediaList([]);
             })
             .finally(() => setLoading(false));
-    }, [username]);
+    }, [username, fetchWithRefresh]);
 
     /**
      * Aktualisiert die Medientyp-Filterauswahl für die client-seitige Filterung.

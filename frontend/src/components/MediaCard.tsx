@@ -1,7 +1,7 @@
 import type { MediaItem } from "./types";
 import { useState } from "react";
 import type {MediaStatus} from "./types";
-import {useAuth} from "../service/AuthContext.tsx";
+import {useAuth} from "../service/useAuth.ts";
 import {apiUrl} from "../service/api.ts";
 
 /**
