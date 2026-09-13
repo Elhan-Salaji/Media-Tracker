@@ -4,8 +4,8 @@ version: 2
 # always go to the default branch; dependabot.yml has no setting for that.
 #
 # Minor and patch updates arrive grouped, one pull request per ecosystem.
-# Major updates of Maven and npm dependencies stay out of the weekly run:
-# they need a deliberate migration, Spring Boot 4 first (#60).
+# Major updates stay out of the weekly run for Maven, npm and the Docker base
+# images: they need a deliberate migration, Spring Boot 4 first (#60).
 
 updates:
   - package-ecosystem: maven
@@ -54,3 +54,6 @@ updates:
       interval: weekly
     commit-message:
       prefix: build
+    ignore:
+      - dependency-name: "*"
+        update-types: [version-update:semver-major]
