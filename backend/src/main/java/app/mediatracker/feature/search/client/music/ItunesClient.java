@@ -1,5 +1,7 @@
 package app.mediatracker.feature.search.client.music;
 
+import app.mediatracker.config.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -35,6 +37,7 @@ public class ItunesClient {
      * @param limit maximum number of results
      * @return JSON response as a String
      */
+    @Cacheable(CacheConfig.ITUNES_SEARCH)
     public String searchTracks(String term, int limit) {
         return web.get()
                 .uri(u -> u.path("/search")

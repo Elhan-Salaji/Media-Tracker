@@ -1,5 +1,7 @@
 package app.mediatracker.feature.search.client.book;
 
+import app.mediatracker.config.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -33,6 +35,7 @@ public class OpenLibraryClient {
     /**
      * Searches for books by title, optional author, and ISBN, with a limit.
      */
+    @Cacheable(CacheConfig.OPEN_LIBRARY_SEARCH)
     public String searchBook(String query, int limit) {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder

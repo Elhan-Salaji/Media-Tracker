@@ -1,5 +1,6 @@
 package app.mediatracker.feature.search.client.movie_and_series;
 
+import app.mediatracker.config.CacheConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
@@ -37,7 +38,7 @@ public class IMDbClient {
      * @param query the search term
      * @return JSON response as a String
      */
-    @Cacheable("IMDbSearch")
+    @Cacheable(CacheConfig.IMDB_SEARCH)
     public String searchMovieAndSeries(String query) {
         return web.get()
                 .uri(u -> u.path("/search/titles")
