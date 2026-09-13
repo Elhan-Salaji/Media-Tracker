@@ -1,0 +1,59 @@
+version: 2
+
+# Version updates target develop like every other change. Security updates
+# always go to the default branch; dependabot.yml has no setting for that.
+#
+# Minor and patch updates arrive grouped, one pull request per ecosystem.
+# Major updates stay out of the weekly run for Maven, npm and the Docker base
+# images: they need a deliberate migration, Spring Boot 4 first (#60).
+
+updates:
+  - package-ecosystem: maven
+    directory: /backend
+    target-branch: develop
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: build
+    groups:
+      maven-minor-and-patch:
+        update-types: [minor, patch]
+    ignore:
+      - dependency-name: "*"
+        update-types: [version-update:semver-major]
+
+  - package-ecosystem: npm
+    directory: /frontend
+    target-branch: develop
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: build
+    groups:
+      npm-minor-and-patch:
+        update-types: [minor, patch]
+    ignore:
+      - dependency-name: "*"
+        update-types: [version-update:semver-major]
+
+  - package-ecosystem: github-actions
+    directory: /
+    target-branch: develop
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: build
+    groups:
+      actions:
+        patterns: ["*"]
+
+  - package-ecosystem: docker
+    directories: [/backend, /frontend]
+    target-branch: develop
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: build
+    ignore:
+      - dependency-name: "*"
+        update-types: [version-update:semver-major]

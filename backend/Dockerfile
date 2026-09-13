@@ -1,10 +1,13 @@
 # Stage 1: Build
-FROM maven:3.9.6-eclipse-temurin-21 AS build
+# The Temurin JDK plus the Maven Wrapper, the same pair CI uses. The wrapper pins
+# the Maven version, so no Maven image with its own Java tag is involved.
+FROM eclipse-temurin:21-jdk-alpine AS build
 WORKDIR /app
-COPY pom.xml .
-RUN mvn dependency:go-offline -B
+COPY mvnw pom.xml ./
+COPY .mvn .mvn
+RUN ./mvnw dependency:go-offline -B
 COPY src ./src
-RUN mvn clean package -DskipTests -B
+RUN ./mvnw clean package -DskipTests -B
 
 # Stage 2: Runtime
 FROM eclipse-temurin:21-jre-alpine

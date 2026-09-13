@@ -7,18 +7,22 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.12</version>
+        <version>3.5.16</version>
         <relativePath/>
     </parent>
 
     <groupId>app.mediatracker</groupId>
     <artifactId>media-tracker-backend</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.1.0</version>
     <name>media-tracker-backend</name>
     <description>Backend for Media-Tracker-3</description>
 
     <properties>
         <java.version>21</java.version>
+        <!-- Lombok 1.18.36, the version Spring Boot 3.2 ships, crashes javac on JDK 25. -->
+        <lombok.version>1.18.48</lombok.version>
+        <!-- Byte Buddy 1.14.19 from Spring Boot 3.2 stops at Java 23, so Mockito cannot mock on JDK 25. -->
+        <byte-buddy.version>1.18.13</byte-buddy.version>
     </properties>
 
     <dependencies>
@@ -45,7 +49,7 @@
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-            <version>2.6.0</version>
+            <version>2.9.1</version>
         </dependency>
 
         <dependency>
@@ -54,9 +58,14 @@
         </dependency>
 
         <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.36</version>
+            <version>${lombok.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -84,10 +93,13 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- spring30x 4.11.0 knows MongoDB download packages only up to Ubuntu 23.10,
+             which breaks the integration tests on current Linux. spring3x is the
+             maintained artifact for Spring Boot 3.x and covers Ubuntu 24.04. -->
         <dependency>
             <groupId>de.flapdoodle.embed</groupId>
-            <artifactId>de.flapdoodle.embed.mongo.spring30x</artifactId>
-            <version>4.11.0</version>
+            <artifactId>de.flapdoodle.embed.mongo.spring3x</artifactId>
+            <version>4.33.0</version>
             <scope>test</scope>
         </dependency>
 
@@ -99,7 +111,7 @@
         <dependency>
             <groupId>com.auth0</groupId>
             <artifactId>java-jwt</artifactId>
-            <version>4.4.0</version>
+            <version>4.6.1</version>
         </dependency>
     </dependencies>
 
@@ -112,14 +124,14 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
+                <version>3.16.0</version>
                 <configuration>
                     <release>${java.version}</release>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
-                            <version>1.18.36</version>
+                            <version>${lombok.version}</version>
                         </path>
                     </annotationProcessorPaths>
                 </configuration>

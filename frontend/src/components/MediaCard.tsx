@@ -1,7 +1,8 @@
 import type { MediaItem } from "./types";
 import { useState } from "react";
 import type {MediaStatus} from "./types";
-import {useAuth} from "../service/AuthContext.tsx";
+import {useAuth} from "../service/useAuth.ts";
+import {apiUrl} from "../service/api.ts";
 
 /**
  * MediaCard-Komponente.
@@ -62,7 +63,7 @@ export default function MediaCard({ item, selected, onSelect }: MediaCardProps){
             searchResult: searchResultPayload,
         };
 
-        const res = await fetchWithRefresh("http://localhost:8080/api/library", {
+        const res = await fetchWithRefresh(apiUrl("/api/library"), {
             method: "POST",
             credentials: "include",
             headers: { "Content-Type": "application/json" },

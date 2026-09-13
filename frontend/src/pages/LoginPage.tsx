@@ -1,6 +1,7 @@
 import { type FormEvent, useEffect, useState } from "react";
 import {Link, useNavigate} from "react-router-dom";
-import {useAuth} from "../service/AuthContext.tsx";
+import {useAuth} from "../service/useAuth.ts";
+import {apiUrl} from "../service/api.ts";
 
 /**
  * LoginPage-Komponente.
@@ -78,7 +79,7 @@ export default function LoginPage() {
      */
 
     async function login(username: string, password: string, rememberMe: boolean) {
-        const url = "http://localhost:8080/auth/login"
+        const url = apiUrl("/auth/login")
 
         const response = await fetch(url, {
             method: "POST",

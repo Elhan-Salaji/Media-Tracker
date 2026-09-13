@@ -27,6 +27,9 @@ services:
     depends_on:
       mongo:
         condition: service_healthy
+    # JWT_SECRET and RAWG_API_KEY come from backend/.env, see backend/.env.example.
+    env_file:
+      - ../backend/.env
     environment:
       SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/mediatracker
       SPRING_THREADS_VIRTUAL_ENABLED: "true"
@@ -34,6 +37,8 @@ services:
     build:
       context: ../frontend
       dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:8080}
     container_name: mt3-frontend
     ports:
       - "5173:80" # Links ist der Frontend Port den wir benutzen, Rechts ist der Frontend Port den Docker bzw das Image benutzt, docker baut intern die verbindung auf wir müssen nichts weiter tun

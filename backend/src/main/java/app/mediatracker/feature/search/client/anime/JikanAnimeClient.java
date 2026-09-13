@@ -1,5 +1,7 @@
 package app.mediatracker.feature.search.client.anime;
 
+import app.mediatracker.config.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -36,6 +38,7 @@ public class JikanAnimeClient {
      * @param query the search term
      * @return JSON response as a String
      */
+    @Cacheable(CacheConfig.JIKAN_ANIME_SEARCH)
     public String searchAnime(String query) {
         return web.get()
                 .uri(u -> u.path("/anime").queryParam("q", query).build())

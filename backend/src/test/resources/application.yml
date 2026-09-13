@@ -34,3 +34,6 @@ search:
     enabled: true
   series:
     enabled: true
+
+rawg:
+  api-key: test-rawg-key
