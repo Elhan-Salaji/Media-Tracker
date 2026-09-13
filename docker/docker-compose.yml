@@ -27,6 +27,9 @@ services:
     depends_on:
       mongo:
         condition: service_healthy
+    # JWT_SECRET and RAWG_API_KEY come from backend/.env, see backend/.env.example.
+    env_file:
+      - ../backend/.env
     environment:
       SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/mediatracker
       SPRING_THREADS_VIRTUAL_ENABLED: "true"

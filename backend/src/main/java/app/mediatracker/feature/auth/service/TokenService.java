@@ -22,6 +22,9 @@ public class TokenService {
     public TokenService(@Value("${app.jwt.secret}") String secretKey,
                         @Value("${app.jwt.access-token-expiration-in-seconds}") long accessTokenExpirationInMillis,
                         @Value("${app.jwt.refresh-token-expiration-in-seconds}") long refreshTokenExpirationInMillis) {
+        if (secretKey == null || secretKey.isBlank()) {
+            throw new IllegalStateException("app.jwt.secret is empty. Set JWT_SECRET, see backend/.env.example.");
+        }
         this.algorithm = Algorithm.HMAC256(secretKey);
         this.verifier = JWT.require(algorithm).build();
         this.accessTokenExpirationInMillis = accessTokenExpirationInMillis * 1000;

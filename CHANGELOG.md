@@ -28,6 +28,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - **Integration tests on current Linux:** Swapped `de.flapdoodle.embed.mongo.spring30x` 4.11.0 for `de.flapdoodle.embed.mongo.spring3x` 4.20.0. The old artifact resolves a MongoDB download package only up to Ubuntu 23.10, so the three integration tests failed to start their embedded database on Ubuntu 24.04 (#1).
 - **Maven Wrapper:** `backend/mvnw` carries the executable bit, so `./mvnw` runs on a fresh clone and in the pipeline (#1).
 
+### Security
+- **No secret defaults:** `JWT_SECRET` and `RAWG_API_KEY` have no fallback value any more. The backend stops at startup when one of them is missing or empty, and `backend/.env.example` lists both. Docker Compose passes `backend/.env` to the backend container. Before, `application.yml` carried a working RAWG key and the JWT signing secret (#4).
+
 ## [1.0.0] - 2026-02-15
 
 ### Added

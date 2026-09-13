@@ -20,3 +20,6 @@ Thumbs.db
 # Docker files
 Dockerfile
 .dockerignore
+
+# Local secrets
+.env
