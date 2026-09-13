@@ -22,7 +22,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
     - **Trigger:** Push builds run on `main` and `develop`, every other branch is covered by the build of its pull request. That replaces the `workflow: rules:` block which kept branch and merge request pipelines from running twice.
     - **Test reports:** GitHub Actions has no counterpart to GitLab's `reports: junit:`. The Surefire XML files go up as a build artifact instead, so a failed test shows up in the job log and in the downloadable report.
 
+- **README:** The README describes the GitHub repository: what the app does, the stack, the configuration, and how to run it with Docker and from source. The clone URLs and the wiki link no longer point at HdM GitLab (#6).
+
 ### Removed
+- **Leftover files:** The npm manifest in the repository root, the Vite template README in `frontend/` and the `.gitkeep` files in directories that hold files or nothing at all (#6).
 - **`.gitlab-ci.yml`:** Deleted together with the `deploy` stage, which never held a job (#1).
 - **`allow_failure` on the image builds:** The flag worked around the flaky dind setup on the old runners. A broken image build now fails the pipeline (#1).
 
