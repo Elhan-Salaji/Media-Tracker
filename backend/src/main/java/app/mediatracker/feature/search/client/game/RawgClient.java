@@ -3,6 +3,7 @@ package app.mediatracker.feature.search.client.game;
 import app.mediatracker.config.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -12,9 +13,13 @@ import org.springframework.web.reactive.function.client.WebClient;
  * Purpose: Provides a method to retrieve game titles based on a search term
  * as a raw JSON response.
  *
- * Configuration: Base URL can be overridden via "rawg.base-url".
+ * Configuration: Base URL can be overridden via "rawg.base-url". The API key comes from
+ * "rawg.api-key" (RAWG_API_KEY) and has no default.
+ *
+ * Activation: Only loaded if "search.game.enabled=true" is set, like {@code GameSearchProvider}.
  */
 @Component
+@ConditionalOnProperty(prefix = "search.game", name = "enabled", havingValue = "true")
 public class RawgClient {
 
     private final WebClient web;
@@ -29,7 +34,10 @@ public class RawgClient {
      */
     public RawgClient(WebClient.Builder builder,
                       @Value("${rawg.base-url:https://rawg.io/api}") String baseUrl,
-                      @Value("${rawg.api-key:}") String apiKey ) {
+                      @Value("${rawg.api-key}") String apiKey) {
+        if (apiKey == null || apiKey.isBlank()) {
+            throw new IllegalStateException("rawg.api-key is empty. Set RAWG_API_KEY, see backend/.env.example.");
+        }
         this.web = builder.baseUrl(baseUrl).build();
         this.apiKey = apiKey;
     }
