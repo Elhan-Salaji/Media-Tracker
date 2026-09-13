@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+###  Added
+- **Contribution workflow:** `CONTRIBUTING.md` writes down how the team works: issue first, a `type/short-description-#issue` branch off `develop`, one pushed commit at a time, a pull request with a merge commit. An issue template and a pull request template carry the formats (#9).
+- **Commit Check:** A new workflow runs `.github/scripts/check_commits.py` on every pull request and every push to `develop` and `main`, and fails on a commit that breaks `<type>: <description> #<issue>`. Merge commits, reverts and the commits from before the check are exempt (#9).
+
 ###  Changed
 - **CI/CD:** Replaced the GitLab pipeline with **GitHub Actions** (`.github/workflows/ci.yml`) after the move of the repository. The job order stays the same: Lint -> Test -> Build -> Package.
     - **Runtimes:** `setup-java` (Temurin 21) and `setup-node` (Node 22) replace the `maven` and `node` container images. Both actions cache the Maven repository and the npm downloads, which covers the old `cache:` block.
