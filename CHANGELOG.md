@@ -26,6 +26,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ### Fixed
 - **Build on current JDKs:** Lombok 1.18.48 and Byte Buddy 1.18.13 replace the versions Spring Boot 3.2 ships (1.18.36 and 1.14.19). The old Lombok crashed javac on JDK 25, and the old Byte Buddy kept Mockito from mocking. `./mvnw test` now passes on JDK 21 and JDK 25, and the build target stays Java 21 (#53).
+- **Token refresh:** Requests that run into a 401 at the same time share one refresh call. The shared promise lived in a local variable that every render reset, so parallel requests could each start their own refresh (#55).
 - **Integration tests on current Linux:** Swapped `de.flapdoodle.embed.mongo.spring30x` 4.11.0 for `de.flapdoodle.embed.mongo.spring3x` 4.20.0. The old artifact resolves a MongoDB download package only up to Ubuntu 23.10, so the three integration tests failed to start their embedded database on Ubuntu 24.04 (#1).
 - **Maven Wrapper:** `backend/mvnw` carries the executable bit, so `./mvnw` runs on a fresh clone and in the pipeline (#1).
 
