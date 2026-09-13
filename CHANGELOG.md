@@ -7,13 +7,14 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 ## [Unreleased]
 
 ### Added
-- **Contribution workflow:** `CONTRIBUTING.md` writes down how the team works: issue first, a `type/short-description-#issue` branch off `develop`, one pushed commit at a time, a pull request with a merge commit. An issue template and a pull request template carry the formats (#9).
+- **Contribution workflow:** `CONTRIBUTING.md` writes down how the team works: issue first, a `type/short-description-#issue` branch off `develop`, one pushed commit at a time, a pull request per change. An issue template and a pull request template carry the formats (#9).
 - **Commit Check:** A new workflow runs `.github/scripts/check_commits.py` on every pull request and every push to `develop` and `main`, and fails on a commit that breaks `<type>: <description> #<issue>`. Merge commits, reverts and the commits from before the check are exempt (#9).
 - **Dependabot:** `.github/dependabot.yml` checks Maven, npm, GitHub Actions and the Docker base images once a week and opens grouped pull requests against `develop`. Major updates of Maven and npm dependencies stay out of the weekly run until the team plans them, and the Commit Check skips the commits Dependabot writes (#57).
 - **Search caching:** The six search clients keep their responses per query in Caffeine caches, so a repeated search skips the external API. Jikan entries expire after six hours, the other sources after one hour. The `@Cacheable` on `IMDbClient` had no effect before, because nothing enabled caching (#5).
 - **Configurable backend address:** The frontend reads the backend address from `VITE_API_BASE_URL` instead of eight hardcoded `http://localhost:8080` URLs. `frontend/.env.example` documents the variable, and the frontend image takes it as a build argument (#3).
 
 ### Changed
+- **Squash merges:** Pull requests reach `develop` as one squash commit each, and release merges from `develop` into `main` keep a merge commit. Pull request titles follow the commit format, and the Commit Check accepts the pull request number GitHub appends to a squash subject (#70).
 - **CI/CD:** Replaced the GitLab pipeline with **GitHub Actions** (`.github/workflows/ci.yml`) after the move of the repository. The job order stays the same: Lint -> Test -> Build -> Package (#1).
     - **Runtimes:** `setup-java` (Temurin 21) and `setup-node` (Node 22) replace the `maven` and `node` container images. Both actions cache the Maven repository and the npm downloads, which covers the old `cache:` block.
     - **Docker:** The Docker-in-Docker service and the wait loop around it are gone. GitHub runners come with a running Docker daemon, so `docker build` works without a service container.
