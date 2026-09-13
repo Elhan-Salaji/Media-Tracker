@@ -9,7 +9,7 @@ import app.mediatracker.feature.library.model.UserLibraryEntry;
 import app.mediatracker.feature.library.model.LibraryEntryStatus;
 
 @Component
-public class demo_media_data {
+public class DemoMediaData {
 
     public List<UserLibraryEntry> createDemoMediaData() {
         List<UserLibraryEntry> mediaTestData = new ArrayList<>();
