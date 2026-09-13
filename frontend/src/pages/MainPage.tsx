@@ -4,6 +4,7 @@ import Content from "../components/Content.tsx";
 import Footer from "../components/Footer.tsx";
 import type {MediaItem, MediaType} from "../components/types.ts";
 import {useAuth} from "../service/AuthContext.tsx";
+import {apiUrl} from "../service/api.ts";
 
 /**
  * MainPage verwaltet den seitenweiten State und koordiniert die Suchfunktionalität.
@@ -53,7 +54,7 @@ export default function MainPage() {
             setLoading(true);
 
             // Kodiert Parameter, um fehlerhafte URLs zu vermeiden
-            const url = `http://localhost:8080/api/search?q=${encodeURIComponent(query)}&types=${encodeURIComponent(type)}&limit=${encodeURIComponent(limit)}`;
+            const url = apiUrl(`/api/search?q=${encodeURIComponent(query)}&types=${encodeURIComponent(type)}&limit=${encodeURIComponent(limit)}`);
 
             const response = await fetch(url, {
                 credentials:"include"
