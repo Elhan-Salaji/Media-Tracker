@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import app.mediatracker.feature.user.model.User;
 
 @Component
-public class demo_user_data {
+public class DemoUserData {
 
     public List<User> createDemoUsers() {
         List<User> userTestData = new ArrayList<>();
