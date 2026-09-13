@@ -10,6 +10,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - **Contribution workflow:** `CONTRIBUTING.md` writes down how the team works: issue first, a `type/short-description-#issue` branch off `develop`, one pushed commit at a time, a pull request with a merge commit. An issue template and a pull request template carry the formats (#9).
 - **Commit Check:** A new workflow runs `.github/scripts/check_commits.py` on every pull request and every push to `develop` and `main`, and fails on a commit that breaks `<type>: <description> #<issue>`. Merge commits, reverts and the commits from before the check are exempt (#9).
 - **Dependabot:** `.github/dependabot.yml` checks Maven, npm, GitHub Actions and the Docker base images once a week and opens grouped pull requests against `develop`. Major updates of Maven and npm dependencies stay out of the weekly run until the team plans them, and the Commit Check skips the commits Dependabot writes (#57).
+- **Search caching:** The six search clients keep their responses per query in Caffeine caches, so a repeated search skips the external API. Jikan entries expire after six hours, the other sources after one hour. The `@Cacheable` on `IMDbClient` had no effect before, because nothing enabled caching (#5).
 
 ### Changed
 - **CI/CD:** Replaced the GitLab pipeline with **GitHub Actions** (`.github/workflows/ci.yml`) after the move of the repository. The job order stays the same: Lint -> Test -> Build -> Package (#1).
