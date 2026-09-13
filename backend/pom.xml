@@ -21,6 +21,8 @@
         <java.version>21</java.version>
         <!-- Lombok 1.18.36, the version Spring Boot 3.2 ships, crashes javac on JDK 25. -->
         <lombok.version>1.18.48</lombok.version>
+        <!-- Byte Buddy 1.14.19 from Spring Boot 3.2 stops at Java 23, so Mockito cannot mock on JDK 25. -->
+        <byte-buddy.version>1.18.13</byte-buddy.version>
     </properties>
 
     <dependencies>
