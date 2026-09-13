@@ -1,4 +1,7 @@
 spring:
+  config:
+    # A local run reads the secrets from backend/.env, see backend/.env.example.
+    import: optional:file:.env[.properties]
   data:
     mongodb:
       auto-index-creation: true
@@ -13,9 +16,8 @@ server:
 # ---- App Config (Security) ----
 app:
   jwt:
-    # This is a default key for development purposes.
-    # In production, this value should be long, random, and secret!
-    secret: "secret_key_fuer_das_development_das_muss_spaeter_geendert_werden_wenn_das_projekt_irgedwann_fertig_ist_zu_irged_einem_sicherer_key_davor_war_das_hier_hardcoded_in_JwtService"
+    # No default. The backend refuses to start without JWT_SECRET.
+    secret: ${JWT_SECRET}
     access-token-expiration-in-seconds: 900 # 15 minutes
     refresh-token-expiration-in-seconds: 1209600 # 14 days
 
@@ -45,8 +47,8 @@ itunes:
 
 rawg:
   base-url: https://rawg.io/api
-  # Uses environment variable if present, otherwise defaults to the hardcoded key
-  api-key: "${RAWG_API_KEY:ff51c125cfc14b7abce7c70740910d24}"
+  # No default. While game search is enabled, the backend refuses to start without RAWG_API_KEY.
+  api-key: ${RAWG_API_KEY}
 
 openlibrary:
   base-url: https://openlibrary.org
