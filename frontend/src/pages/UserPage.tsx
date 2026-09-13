@@ -63,7 +63,7 @@ export default function UserPage() {
                 setMediaList([]);
             })
             .finally(() => setLoading(false));
-    }, [username]);
+    }, [username, fetchWithRefresh]);
 
     /**
      * Aktualisiert die Medientyp-Filterauswahl für die client-seitige Filterung.
