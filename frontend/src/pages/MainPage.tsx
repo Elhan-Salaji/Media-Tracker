@@ -80,6 +80,9 @@ export default function MainPage() {
      */
     useEffect(() => {
         search(query, selectedType);
+        // Läuft bewusst nur beim Mounten mit den Startwerten. Mit `query` und `selectedType`
+        // als Abhängigkeiten löste jeder Tastendruck im Suchfeld eine Suche aus.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     /**
