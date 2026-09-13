@@ -1,5 +1,6 @@
 import {type FormEvent, useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
+import {apiUrl} from "../service/api.ts";
 
 /**
  * RegisterPage-Komponente.
@@ -73,7 +74,7 @@ export default function RegisterPage() {
             throw new Error("Passwords don't match.")
         }
 
-        const url = "http://localhost:8080/auth/register"
+        const url = apiUrl("/auth/register")
         const response = await fetch(url, {
             method: "POST",
             credentials: "include",

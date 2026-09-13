@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, useCallback } from "react";
 import type { ReactNode } from "react";
 import type { User } from "../components/types.ts";
+import {apiUrl} from "./api.ts";
 
 /**
  * AuthContext / AuthProvider.
@@ -72,7 +73,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const refreshUser = useCallback(async () => {
         try {
-            const response = await fetchWithRefresh("http://localhost:8080/auth/me");
+            const response = await fetchWithRefresh(apiUrl("/auth/me"));
             if (response.ok) {
                 const data = await response.json();
                 setUser(data);
@@ -102,7 +103,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const logout = async () => {
         setUser(null);
-        const url = "http://localhost:8080/auth/logout";
+        const url = apiUrl("/auth/logout");
         try {
             await fetch(url, {
                 method: "POST",
@@ -125,7 +126,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (refreshPromise) return refreshPromise;
 
         refreshPromise = (async () => {
-            const res = await fetch('http://localhost:8080/auth/refresh', {
+            const res = await fetch(apiUrl("/auth/refresh"), {
                 method: 'POST',
                 credentials: 'include'
             });
