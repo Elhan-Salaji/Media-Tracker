@@ -1,7 +1,8 @@
-import { createContext, useContext, useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import type { ReactNode } from "react";
 import type { User } from "../components/types.ts";
 import {apiUrl} from "./api.ts";
+import {AuthContext} from "./AuthContextValue.ts";
 
 /**
  * AuthContext / AuthProvider.
@@ -14,17 +15,6 @@ import {apiUrl} from "./api.ts";
  * - Geteilter Anwendungs-Service, der aus jeder Komponente über `useAuth()` erreichbar ist.
  * - Verhindert duplizierte Auth-/Session-Logik über Seiten und UI-Komponenten hinweg.
  */
-
-interface AuthContextType {
-    user: (User & { userid: string }) | null;
-    setUser: (user: (User & { userid: string }) | null) => void;
-    logout: () => void;
-    fetchWithRefresh: (url: string, options?: RequestInit) => Promise<Response>;
-    isLoading: boolean;
-    refreshUser: () => Promise<void>;
-}
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
     // Hält authentifizierte Nutzerdaten (null, wenn nicht eingeloggt)
@@ -146,18 +136,4 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             {children}
         </AuthContext.Provider>
     );
-}
-
-/**
- * React-Hook, um Authentifizierungs-State und Helper zu nutzen.
- *
- * @throws Error falls außerhalb eines AuthProviders verwendet
- */
-
-export function useAuth() {
-    const context = useContext(AuthContext);
-    if (context === undefined) {
-        throw new Error("useAuth must be used within an AuthProvider");
-    }
-    return context;
 }

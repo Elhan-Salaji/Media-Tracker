@@ -1,6 +1,6 @@
 import { type FormEvent, useEffect, useState } from "react";
 import {Link, useNavigate} from "react-router-dom";
-import {useAuth} from "../service/AuthContext.tsx";
+import {useAuth} from "../service/useAuth.ts";
 import {apiUrl} from "../service/api.ts";
 
 /**
