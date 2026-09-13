@@ -18,8 +18,6 @@ jobs:
   commit-check:
     name: Commit Check
     runs-on: ubuntu-latest
-    # Dependabot writes its own commit messages, without an issue number.
-    if: github.actor != 'dependabot[bot]'
     steps:
       - uses: actions/checkout@v7
         with:

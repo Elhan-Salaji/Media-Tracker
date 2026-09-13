@@ -20,7 +20,7 @@ Example: `fix: retry the initial search after login #17`
 
 Allowed types: `add`, `update`, `build`, `fix`, `feat`, `chore`, `test`, `docs`, `refactor`, `style`, `remove`, `revert`, `release`, `init`.
 
-The Commit Check workflow runs `.github/scripts/check_commits.py` on every pull request and on every push to `develop` and `main`. It fails on a commit that breaks the format. Merge commits and reverts are exempt, and so are the commits from before the check existed.
+The Commit Check workflow runs `.github/scripts/check_commits.py` on every pull request and on every push to `develop` and `main`. It fails on a commit that breaks the format. Merge commits, reverts and Dependabot commits are exempt, and so are the commits from before the check existed.
 
 ## Branching rules
 
