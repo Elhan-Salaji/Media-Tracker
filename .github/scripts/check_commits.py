@@ -20,12 +20,17 @@ COMMIT_PATTERN = re.compile(
 )
 EXEMPT_PATTERN = re.compile(r'^(Merge |Revert "|init(ial)? (commit|repo))', re.IGNORECASE)
 
+# Dependabot writes its own commit messages, without an issue number.
+EXEMPT_AUTHORS = {"dependabot[bot]"}
+
 # The last commit on develop before the convention existed. Everything reachable
 # from it keeps its old message format and is left out of the check.
 BASELINE = "a7ae51160e999c2a9f340bd58e39cb5b1bf328fa"
 
 # GitHub sends this as the "before" SHA when a push creates a branch.
 NULL_SHA = "0" * 40
+
+FIELD_SEPARATOR = "\x1f"
 
 
 def is_valid(subject: str) -> bool:
@@ -37,10 +42,15 @@ def commit_subjects() -> list[str]:
     head = os.environ.get("HEAD_SHA", "HEAD")
     revisions = [head, "-1"] if base in ("", NULL_SHA) else [f"{base}..{head}"]
     result = subprocess.run(
-        ["git", "log", "--format=%s", *revisions, "--not", BASELINE],
+        ["git", "log", f"--format=%an{FIELD_SEPARATOR}%s", *revisions, "--not", BASELINE],
         capture_output=True, text=True, check=True,
     )
-    return [line for line in result.stdout.splitlines() if line.strip()]
+    subjects = []
+    for line in result.stdout.splitlines():
+        author, _, subject = line.partition(FIELD_SEPARATOR)
+        if subject.strip() and author not in EXEMPT_AUTHORS:
+            subjects.append(subject)
+    return subjects
 
 
 def main() -> None:
