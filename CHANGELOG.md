@@ -6,6 +6,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+### Changed
+- **User-Agent:** The search clients send `MediaTracker/<version> (+https://github.com/Elhan-Salaji/Media-Tracker)` in place of the fixed `MediaTracker/1.0 (+localhost)`. `HTTP_USER_AGENT` in `backend/.env` replaces that value, for example with the contact e-mail Open Library asks for. An empty `HTTP_USER_AGENT` stops the backend at startup (#12).
 ### Added
 - **Tracking automation:** Dependabot assigns Elhan-Salaji and Snobbus to its pull requests. The new Project Fields workflow sets Priority and Size on the Media Tracker project from the `priority::` and `difficulty::` labels of an issue and reads a personal access token from the `PROJECT_TOKEN` secret. CONTRIBUTING and the pull request template name the assignees and the reviewer (#105).
 

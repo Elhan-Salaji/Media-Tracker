@@ -37,3 +37,6 @@ search:
 
 rawg:
   api-key: test-rawg-key
+
+web-client:
+  user-agent: "MediaTracker/test (+https://github.com/Elhan-Salaji/Media-Tracker)"
