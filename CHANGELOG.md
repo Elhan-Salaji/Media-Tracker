@@ -6,6 +6,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+### Added
+- **License:** The project is released under the MIT License, see `LICENSE` (#7).
+
 ## [1.1.0] - 2026-09-13
 
 ### Added
