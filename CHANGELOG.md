@@ -9,6 +9,12 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 ### Added
 - **License:** The project is released under the MIT License, see `LICENSE` (#7).
 
+### Changed
+- **Architecture decisions:** The records moved to the [Architecture Decision Records](https://github.com/Elhan-Salaji/Media-Tracker/wiki/Architecture-Decision-Records) wiki page, in English. ADR 01 now records MongoDB as accepted, and four records cover decisions the team had taken without writing them down: one search provider per media type, JWT in HttpOnly cookies, package by feature, and git flow with squash merges (#8).
+
+### Removed
+- **`docs/architecture/ADRs/`:** The German stub of ADR 01 (#8).
+
 ## [1.1.0] - 2026-09-13
 
 ### Added
