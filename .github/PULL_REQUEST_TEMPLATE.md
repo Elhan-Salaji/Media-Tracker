@@ -10,4 +10,4 @@ Closes #
 - [ ] Every commit follows `<type>: <description> #<issue>` and was pushed on its own.
 - [ ] Tests added or updated for changed behaviour.
 - [ ] `CHANGELOG.md` updated under `[Unreleased]`, unless nothing user-visible changed.
-- [ ] Labels and assignee set.
+- [ ] Labels and assignee set, review requested (Snobbus, or Elhan-Salaji for pull requests by Snobbus).
