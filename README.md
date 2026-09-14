@@ -81,4 +81,4 @@ Every change starts with an issue and reaches `develop` through a pull request. 
 
 ## License
 
-The project has no license yet (#7). Until the team picks one, all rights stay with the authors.
+Media Tracker is released under the [MIT License](LICENSE).
