@@ -38,6 +38,10 @@ cd backend && ./mvnw test
 cd frontend && npm run lint && npm run build
 ```
 
+## Architecture decisions
+
+Record a significant decision on the [Architecture Decision Records](https://github.com/Elhan-Salaji/Media-Tracker/wiki/Architecture-Decision-Records) wiki page, with status, context, decision and consequences. When a decision changes, add a new record that supersedes the old one instead of deleting it.
+
 ## Changelog
 
 Add every user-visible change to `CHANGELOG.md` under `[Unreleased]`, in the matching [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) category (Added, Changed, Deprecated, Removed, Fixed, Security), and reference the issue.
