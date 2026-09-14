@@ -6,6 +6,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+### Fixed
+- **Initial search:** The main page shows anime when you open it. On load the backend sent Jikan an empty `q=`, which Jikan answers with 504, so the page stayed empty. The anime client leaves an empty search term out, and a search the backend rejects or never answers shows an error message instead of an empty list (#17).
+
 ## [1.1.1] - 2026-09-14
 
 ### Added
