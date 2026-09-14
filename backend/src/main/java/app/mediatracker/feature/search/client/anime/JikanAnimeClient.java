@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.Optional;
+
 /**
  * Lightweight HTTP client for the Jikan API (MyAnimeList proxy).
  *
@@ -34,14 +36,17 @@ public class JikanAnimeClient {
      * Searches for anime on Jikan and returns the raw JSON response.
      *
      * Note: Blocks the calling thread until the response is received (simplified usage).
+     * A blank query leaves the {@code q} parameter out, because Jikan answers {@code q=} with 504.
      *
-     * @param query the search term
+     * @param query the search term; a blank term returns Jikan's unfiltered anime list
      * @return JSON response as a String
      */
     @Cacheable(CacheConfig.JIKAN_ANIME_SEARCH)
     public String searchAnime(String query) {
         return web.get()
-                .uri(u -> u.path("/anime").queryParam("q", query).build())
+                .uri(u -> u.path("/anime")
+                        .queryParamIfPresent("q", Optional.ofNullable(query).filter(q -> !q.isBlank()))
+                        .build())
                 .retrieve()
                 .bodyToMono(String.class)
                 .block(); // keep it simple
