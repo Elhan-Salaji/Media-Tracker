@@ -24,9 +24,6 @@ export default function MainPage() {
     // Ausgewählter Medien-Filtertyp
     const [selectedType, setSelectedType] = useState<MediaType>("anime");
 
-    // Optionaler Backend-Limit-Parameter
-    const limit = "";
-
     // Holt den authentifizierten Nutzer für die Anzeige in der Navbar
     const {user: loggedInUser} = useAuth();
 
@@ -53,8 +50,8 @@ export default function MainPage() {
         try {
             setLoading(true);
 
-            // Kodiert Parameter, um fehlerhafte URLs zu vermeiden
-            const url = apiUrl(`/api/search?q=${encodeURIComponent(query)}&types=${encodeURIComponent(type)}&limit=${encodeURIComponent(limit)}`);
+            // Kodiert Parameter, um fehlerhafte URLs zu vermeiden. Ohne `limit` gilt der Backend-Default.
+            const url = apiUrl(`/api/search?q=${encodeURIComponent(query)}&types=${encodeURIComponent(type)}`);
 
             const response = await fetch(url, {
                 credentials:"include"
