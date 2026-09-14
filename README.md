@@ -4,6 +4,8 @@
 
 Media Tracker keeps anime, manga, movies, series, games, books and music in one personal library. One search covers all seven media types across five public APIs. You save a title with a status and notes, and your list shows up on a public profile page.
 
+This README covers running the project. The [wiki](https://github.com/Elhan-Salaji/Media-Tracker/wiki) explains why it looks the way it does, starting with the [Architecture Decision Records](https://github.com/Elhan-Salaji/Media-Tracker/wiki/Architecture-Decision-Records).
+
 ## Stack
 
 | Part | Technology |
@@ -20,7 +22,7 @@ Media Tracker keeps anime, manga, movies, series, games, books and music in one 
 backend/    Spring Boot service (./mvnw)
 frontend/   React app built with Vite
 docker/     docker-compose.yml for the full stack
-docs/       architecture diagram and the first decision record
+docs/       use case diagram
 ```
 
 ## Run it with Docker
@@ -81,4 +83,4 @@ Every change starts with an issue and reaches `develop` through a pull request. 
 
 ## License
 
-The project has no license yet (#7). Until the team picks one, all rights stay with the authors.
+Media Tracker is released under the [MIT License](LICENSE).

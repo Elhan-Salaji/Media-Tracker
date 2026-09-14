@@ -6,6 +6,17 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-09-14
+
+### Added
+- **License:** The project is released under the MIT License, see `LICENSE` (#7).
+
+### Changed
+- **Architecture decisions:** The records moved to the [Architecture Decision Records](https://github.com/Elhan-Salaji/Media-Tracker/wiki/Architecture-Decision-Records) wiki page, in English. ADR 01 now records MongoDB as accepted, and four records cover decisions the team had taken without writing them down: one search provider per media type, JWT in HttpOnly cookies, package by feature, and git flow with squash merges (#8).
+
+### Removed
+- **`docs/architecture/ADRs/`:** The German stub of ADR 01 (#8).
+
 ## [1.1.0] - 2026-09-13
 
 ### Added
@@ -109,7 +120,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Project skeleton: the Spring Boot backend with Maven Wrapper and entry point under the base package `app.mediatracker`, a base `application.yml`, and the directory layout for backend, frontend, Docker and documentation.
 - The first architecture decision record, `docs/architecture/ADRs/ADR 01.md`.
 
-[Unreleased]: https://github.com/Elhan-Salaji/Media-Tracker/compare/1.1.0...HEAD
+[Unreleased]: https://github.com/Elhan-Salaji/Media-Tracker/compare/1.1.1...HEAD
+[1.1.1]: https://github.com/Elhan-Salaji/Media-Tracker/compare/1.1.0...1.1.1
 [1.1.0]: https://github.com/Elhan-Salaji/Media-Tracker/compare/1.0.0...1.1.0
 [1.0.0]: https://github.com/Elhan-Salaji/Media-Tracker/compare/0.1.1...1.0.0
 [0.1.1]: https://github.com/Elhan-Salaji/Media-Tracker/compare/0.1.0...0.1.1
