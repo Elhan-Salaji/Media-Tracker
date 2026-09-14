@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Navbar from "../components/Navbar.tsx";
 import Content from "../components/Content.tsx";
 import Footer from "../components/Footer.tsx";
@@ -20,6 +20,9 @@ export default function MainPage() {
 
     // Fehlermeldung der letzten Suche, null solange sie gelungen ist
     const [error, setError] = useState<string | null>(null);
+
+    // Nummer der zuletzt gestarteten Suche. Antworten älterer Suchen dürfen den State nicht mehr setzen.
+    const latestSearch = useRef(0);
 
     // Aktueller Wert der Such-Eingabe
     const [query, setQuery] = useState("");
@@ -48,9 +51,11 @@ export default function MainPage() {
      *
      * Behandelt den Ladezustand. Jede Antwort außerhalb von 2xx und jeder Netzwerkfehler
      * leeren die Ergebnisse und setzen eine Fehlermeldung, damit die Seite keine leere Trefferliste vortäuscht.
+     * Startet der Nutzer eine neue Suche, bevor die alte antwortet, verwirft die Seite die alte Antwort.
      */
 
     async function search(query: string, type: MediaType) {
+        const searchId = ++latestSearch.current;
         try {
             setLoading(true);
             setError(null);
@@ -66,13 +71,15 @@ export default function MainPage() {
             }
 
             const data: MediaItem[] = await response.json();
+            if (searchId !== latestSearch.current) return;
             setItems(data);
         } catch (err) {
+            if (searchId !== latestSearch.current) return;
             console.error(err);
             setItems([]);
             setError("The search failed. Please try again.");
         } finally {
-            setLoading(false);
+            if (searchId === latestSearch.current) setLoading(false);
         }
     }
     /**
