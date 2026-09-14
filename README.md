@@ -49,6 +49,7 @@ The backend refuses to start while a required value is missing.
 |---|---|---|
 | `JWT_SECRET` | `backend/.env` | Signs the access and refresh tokens. Generate one with `openssl rand -base64 48`. |
 | `RAWG_API_KEY` | `backend/.env` | Key for the game search, free at https://rawg.io/apidocs. The backend only asks for it while game search is enabled. |
+| `HTTP_USER_AGENT` | `backend/.env`, optional | User-Agent for the search APIs, for example `MediaTracker/1.1.1 (you@example.com)`. Open Library asks for a contact e-mail and lets identified clients send three requests per second instead of one. Without it the backend sends its version and the repository URL. |
 | `VITE_API_BASE_URL` | `frontend/.env` for `npm run dev`, your shell or `docker/.env` for Docker Compose | Address of the backend as the browser sees it. Defaults to `http://localhost:8080`. Vite writes it into the bundle at build time, so a change needs a new build. |
 
 The `.env` files stay out of git. `backend/.env.example` and `frontend/.env.example` list the variables.
