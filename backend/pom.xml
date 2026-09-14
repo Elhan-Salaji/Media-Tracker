@@ -13,7 +13,7 @@
 
     <groupId>app.mediatracker</groupId>
     <artifactId>media-tracker-backend</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
     <name>media-tracker-backend</name>
     <description>Backend for Media-Tracker-3</description>
 
