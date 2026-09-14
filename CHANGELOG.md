@@ -6,6 +6,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+### Added
+- **Tracking automation:** Dependabot assigns Elhan-Salaji and Snobbus to its pull requests. The new Project Fields workflow sets Priority and Size on the Media Tracker project from the `priority::` and `difficulty::` labels of an issue and reads a personal access token from the `PROJECT_TOKEN` secret. CONTRIBUTING and the pull request template name the assignees and the reviewer (#105).
+
 ### Fixed
 - **Anime search:** The WebClient sent `Accept-Encoding: gzip` with every request, and Jikan answers any `Accept-Encoding` header with 504, so the anime search came back empty. The shared WebClient requests no compression, and all search sources receive uncompressed responses. Jikan's manga endpoint answered every request with 504 on 2026-09-14, with or without the header (#81).
 - **Initial search:** On load the backend passed the empty search term of the main page to Jikan as `q=`, which Jikan answers with 504. The anime client leaves an empty term out. A search the backend rejects or never answers shows an error message in place of an empty list (#17).
