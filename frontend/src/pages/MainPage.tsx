@@ -18,6 +18,9 @@ export default function MainPage() {
     // Steuert die Ladeanzeige während asynchroner Operationen
     const [loading, setLoading] = useState(true);
 
+    // Fehlermeldung der letzten Suche, null solange sie gelungen ist
+    const [error, setError] = useState<string | null>(null);
+
     // Aktueller Wert der Such-Eingabe
     const [query, setQuery] = useState("");
 
@@ -43,12 +46,14 @@ export default function MainPage() {
      * @param query - Suchbegriff des Nutzers.
      * @param type - Ausgewählter Medien-Filtertyp.
      *
-     * Behandelt Ladezustand und Fehler-Fallback.
+     * Behandelt den Ladezustand. Jede Antwort außerhalb von 2xx und jeder Netzwerkfehler
+     * leeren die Ergebnisse und setzen eine Fehlermeldung, damit die Seite keine leere Trefferliste vortäuscht.
      */
 
     async function search(query: string, type: MediaType) {
         try {
             setLoading(true);
+            setError(null);
 
             // Kodiert Parameter, um fehlerhafte URLs zu vermeiden. Ohne `limit` gilt der Backend-Default.
             const url = apiUrl(`/api/search?q=${encodeURIComponent(query)}&types=${encodeURIComponent(type)}`);
@@ -57,16 +62,15 @@ export default function MainPage() {
                 credentials:"include"
             });
             if (!response.ok) {
-                if (response.status === 401 || response.status === 403) {
-
                 throw new Error(`HTTP ${response.status}`);
-            }}
+            }
 
             const data: MediaItem[] = await response.json();
             setItems(data);
         } catch (err) {
             console.error(err);
             setItems([]);
+            setError("The search failed. Please try again.");
         } finally {
             setLoading(false);
         }
@@ -127,6 +131,7 @@ export default function MainPage() {
             <Content
                 items={items}
                 loading={loading}
+                error={error}
                 selectedType={selectedType}
                 onTypeChange={handleTypeChange}
             />
