@@ -1,0 +1,35 @@
+name: Project Fields
+
+# Keeps Priority and Size on the Media Tracker project in step with the
+# priority:: and difficulty:: labels of an issue. GITHUB_TOKEN cannot write to a
+# user-owned project, so the job uses the PROJECT_TOKEN secret (CONTRIBUTING.md).
+on:
+  issues:
+    types: [opened, labeled, unlabeled]
+
+permissions:
+  contents: read
+
+# Adding several labels at once fires one event per label. The script reads the
+# labels fresh from the API, so the newest run for an issue is enough.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.issue.number }}
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    name: Sync Project Fields
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      # The runner image ships Python 3 and the GitHub CLI, and the script needs
+      # nothing else.
+      - name: Set Priority and Size from the labels
+        run: python3 .github/scripts/sync_project_fields.py
+        env:
+          GH_TOKEN: ${{ secrets.PROJECT_TOKEN }}
+          REPOSITORY: ${{ github.repository }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          PROJECT_OWNER: Elhan-Salaji
+          PROJECT_NUMBER: "4"
