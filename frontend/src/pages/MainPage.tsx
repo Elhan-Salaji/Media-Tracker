@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Navbar from "../components/Navbar.tsx";
 import Content from "../components/Content.tsx";
 import Footer from "../components/Footer.tsx";
@@ -18,14 +18,17 @@ export default function MainPage() {
     // Steuert die Ladeanzeige während asynchroner Operationen
     const [loading, setLoading] = useState(true);
 
+    // Fehlermeldung der letzten Suche, null solange sie gelungen ist
+    const [error, setError] = useState<string | null>(null);
+
+    // Nummer der zuletzt gestarteten Suche. Antworten älterer Suchen dürfen den State nicht mehr setzen.
+    const latestSearch = useRef(0);
+
     // Aktueller Wert der Such-Eingabe
     const [query, setQuery] = useState("");
 
     // Ausgewählter Medien-Filtertyp
     const [selectedType, setSelectedType] = useState<MediaType>("anime");
-
-    // Optionaler Backend-Limit-Parameter
-    const limit = "";
 
     // Holt den authentifizierten Nutzer für die Anzeige in der Navbar
     const {user: loggedInUser} = useAuth();
@@ -46,32 +49,37 @@ export default function MainPage() {
      * @param query - Suchbegriff des Nutzers.
      * @param type - Ausgewählter Medien-Filtertyp.
      *
-     * Behandelt Ladezustand und Fehler-Fallback.
+     * Behandelt den Ladezustand. Jede Antwort außerhalb von 2xx und jeder Netzwerkfehler
+     * leeren die Ergebnisse und setzen eine Fehlermeldung, damit die Seite keine leere Trefferliste vortäuscht.
+     * Startet der Nutzer eine neue Suche, bevor die alte antwortet, verwirft die Seite die alte Antwort.
      */
 
     async function search(query: string, type: MediaType) {
+        const searchId = ++latestSearch.current;
         try {
             setLoading(true);
+            setError(null);
 
-            // Kodiert Parameter, um fehlerhafte URLs zu vermeiden
-            const url = apiUrl(`/api/search?q=${encodeURIComponent(query)}&types=${encodeURIComponent(type)}&limit=${encodeURIComponent(limit)}`);
+            // Kodiert Parameter, um fehlerhafte URLs zu vermeiden. Ohne `limit` gilt der Backend-Default.
+            const url = apiUrl(`/api/search?q=${encodeURIComponent(query)}&types=${encodeURIComponent(type)}`);
 
             const response = await fetch(url, {
                 credentials:"include"
             });
             if (!response.ok) {
-                if (response.status === 401 || response.status === 403) {
-
                 throw new Error(`HTTP ${response.status}`);
-            }}
+            }
 
             const data: MediaItem[] = await response.json();
+            if (searchId !== latestSearch.current) return;
             setItems(data);
         } catch (err) {
+            if (searchId !== latestSearch.current) return;
             console.error(err);
             setItems([]);
+            setError("The search failed. Please try again.");
         } finally {
-            setLoading(false);
+            if (searchId === latestSearch.current) setLoading(false);
         }
     }
     /**
@@ -130,6 +138,7 @@ export default function MainPage() {
             <Content
                 items={items}
                 loading={loading}
+                error={error}
                 selectedType={selectedType}
                 onTypeChange={handleTypeChange}
             />

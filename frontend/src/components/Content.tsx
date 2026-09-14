@@ -8,6 +8,7 @@ import {useState} from "react";
  * Verantwortlichkeit:
  * - Rendert den Hauptinhalt der Seite.
  * - Zeigt Suchergebnisse als Grid aus MediaCard-Komponenten an.
+ * - Zeigt statt der Ergebnisse den Ladezustand oder eine fehlgeschlagene Suche an.
  * - Verwaltet lokalen UI-Auswahlzustand für aufgeklappte Karten.
  *
  * Architektonische Rolle:
@@ -16,9 +17,10 @@ import {useState} from "react";
  * - Führt selbst keine Backend-Kommunikation aus.
  */
 
-export default function Content({items, loading, selectedType, onTypeChange,}: {
+export default function Content({items, loading, error, selectedType, onTypeChange,}: {
     items: MediaItem[];
     loading: boolean;
+    error: string | null;
     selectedType: MediaType;
     onTypeChange: (value: MediaType) => void;
 
@@ -48,6 +50,9 @@ export default function Content({items, loading, selectedType, onTypeChange,}: {
                 {loading ? (
                     // Zeigt den Ladezustand während der asynchronen Suche an
                     <div className="content-loading">Loading...</div>
+                ) : error ? (
+                    // Zeigt eine fehlgeschlagene Suche an, statt eine leere Trefferliste vorzutäuschen
+                    <div className="content-error" role="alert">{error}</div>
                 ) : (
                     items.map((item) => {
                         const id = item.id ?? "";

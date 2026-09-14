@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anySet;
@@ -115,5 +116,22 @@ class SearchControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].title").value("Bleach"))
                 .andExpect(jsonPath("$[0].type").value("anime"));
+    }
+
+    @Test
+    void testSearchWithEmptyLimitFallsBackToDefault() throws Exception {
+        // Arrange
+        Mockito.when(searchService.search(anyString(), anySet(), anyInt()))
+                .thenReturn(List.of());
+
+        // Act & Assert: The request the main page sends on load, with an empty query and limit
+        mockMvc.perform(get("/api/search")
+                        .param("q", "")
+                        .param("types", "anime")
+                        .param("limit", "")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        Mockito.verify(searchService).search("", Set.of("anime"), 24);
     }
 }

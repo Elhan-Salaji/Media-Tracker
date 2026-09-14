@@ -1,6 +1,8 @@
 package app.mediatracker.feature.search.client.anime;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.springframework.web.reactive.function.client.ClientRequest;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.ExchangeFunction;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -50,5 +52,49 @@ class JikanAnimeClientTest {
         // Assert: Verify the result matches the mock and the request was actually triggered
         assertEquals(jsonResponse, result);
         verify(exchangeFunction, times(1)).exchange(any());
+    }
+
+    @Test
+    void searchAnime_sendsQueryAsParameter() {
+        // Arrange
+        ExchangeFunction exchangeFunction = exchangeReturningEmptyData();
+        JikanAnimeClient client = new JikanAnimeClient(
+                WebClient.builder().exchangeFunction(exchangeFunction), "https://api.jikan.moe/v4");
+
+        // Act
+        client.searchAnime("naruto");
+
+        // Assert: The search term arrives as the q parameter
+        assertEquals("https://api.jikan.moe/v4/anime?q=naruto", requestedUrl(exchangeFunction));
+    }
+
+    @Test
+    void searchAnime_leavesEmptyQueryOut() {
+        // Arrange: Jikan answers "q=" with 504, the main page sends an empty query on load
+        ExchangeFunction exchangeFunction = exchangeReturningEmptyData();
+        JikanAnimeClient client = new JikanAnimeClient(
+                WebClient.builder().exchangeFunction(exchangeFunction), "https://api.jikan.moe/v4");
+
+        // Act
+        client.searchAnime("");
+
+        // Assert: The request goes to /anime without a q parameter
+        assertEquals("https://api.jikan.moe/v4/anime", requestedUrl(exchangeFunction));
+    }
+
+    private static ExchangeFunction exchangeReturningEmptyData() {
+        ExchangeFunction exchangeFunction = mock(ExchangeFunction.class);
+        when(exchangeFunction.exchange(any()))
+                .thenReturn(Mono.just(ClientResponse.create(org.springframework.http.HttpStatus.OK)
+                        .header("Content-Type", "application/json")
+                        .body("{ \"data\": [] }")
+                        .build()));
+        return exchangeFunction;
+    }
+
+    private static String requestedUrl(ExchangeFunction exchangeFunction) {
+        ArgumentCaptor<ClientRequest> request = ArgumentCaptor.forClass(ClientRequest.class);
+        verify(exchangeFunction).exchange(request.capture());
+        return request.getValue().url().toString();
     }
 }

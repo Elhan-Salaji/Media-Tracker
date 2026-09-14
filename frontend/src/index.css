@@ -23,6 +23,7 @@
     --text-dim: rgba(255,255,255,0.78);
     --card-title-h: 44px;
     --card-radius: 20px;
+    --error: #fb2222;
 }
 
 html, body {
@@ -409,6 +410,14 @@ html, body {
     padding: 20px;
     text-align: left;
     font-family: var(--font-mono);
+}
+
+.content-error {
+    grid-column: 1 / -1;
+    padding: 20px;
+    text-align: left;
+    font-family: var(--font-mono);
+    color: var(--error);
 }
 
 .sort-button{
