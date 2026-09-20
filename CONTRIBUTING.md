@@ -40,7 +40,9 @@ The Media Tracker project on GitHub holds every issue and pull request. Its buil
 
 The Project Fields workflow (`.github/workflows/project-fields.yml`) applies that mapping when an issue is opened or its labels change, and clears a field when its label goes away. You don't set Priority or Size by hand. Start date, target date and estimate stay empty.
 
-`GITHUB_TOKEN` cannot write to a project that belongs to a user account. The workflow reads a personal access token (classic) with the `project` and `repo` scopes from the repository secret `PROJECT_TOKEN`, created by Elhan-Salaji, who owns the project. Without the secret the job ends with a notice and changes nothing. When the token expires, replace the secret with `gh secret set PROJECT_TOKEN`.
+`GITHUB_TOKEN` cannot write to a project that belongs to a user account. The workflow reads a personal access token (classic) from the repository secret `PROJECT_TOKEN`, created by Elhan-Salaji, who owns the project. The token needs four scopes: `repo`, `project`, `read:org` and `read:discussion`. The last two earn their place because `gh project` resolves an owner name against users and organisations in one query. Without the secret the job ends with a notice and changes nothing. When the token expires, replace the secret with `gh secret set PROJECT_TOKEN`.
+
+A token that misses one of the scopes fails the job with `gh project item-add failed: unknown owner type`. The message blames the `--owner` argument and says nothing about the token. Check the scopes with `GH_TOKEN=<token> gh auth status` before you look anywhere else.
 
 ## Before you open a pull request
 
