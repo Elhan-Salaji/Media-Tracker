@@ -28,7 +28,8 @@ public class CacheConfig {
 
     public static final String JIKAN_ANIME_SEARCH = "jikanAnimeSearch";
     public static final String JIKAN_MANGA_SEARCH = "jikanMangaSearch";
-    public static final String IMDB_SEARCH = "imdbSearch";
+    public static final String TMDB_MOVIE_SEARCH = "tmdbMovieSearch";
+    public static final String TMDB_SERIES_SEARCH = "tmdbSeriesSearch";
     public static final String RAWG_SEARCH = "rawgSearch";
     public static final String OPEN_LIBRARY_SEARCH = "openLibrarySearch";
     public static final String ITUNES_SEARCH = "itunesSearch";
@@ -56,7 +57,8 @@ public class CacheConfig {
         cacheManager.setCacheNames(List.of());
         register(cacheManager, JIKAN_ANIME_SEARCH, JIKAN_TTL);
         register(cacheManager, JIKAN_MANGA_SEARCH, JIKAN_TTL);
-        register(cacheManager, IMDB_SEARCH, DEFAULT_TTL);
+        register(cacheManager, TMDB_MOVIE_SEARCH, DEFAULT_TTL);
+        register(cacheManager, TMDB_SERIES_SEARCH, DEFAULT_TTL);
         register(cacheManager, RAWG_SEARCH, DEFAULT_TTL);
         register(cacheManager, OPEN_LIBRARY_SEARCH, DEFAULT_TTL);
         register(cacheManager, ITUNES_SEARCH, DEFAULT_TTL);
