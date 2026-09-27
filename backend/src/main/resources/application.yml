@@ -38,6 +38,13 @@ search:
   series:
     enabled: true
 
+# ---- Outgoing Requests ----
+web-client:
+  # Sent with every request to the search APIs. Open Library asks for the application name and a
+  # contact e-mail, so set HTTP_USER_AGENT in backend/.env when you run the backend. Maven fills in
+  # the version.
+  user-agent: "${HTTP_USER_AGENT:MediaTracker/@project.version@ (+https://github.com/Elhan-Salaji/Media-Tracker)}"
+
 # ---- External API Configs ----
 jikan:
   base-url: https://api.jikan.moe/v4
