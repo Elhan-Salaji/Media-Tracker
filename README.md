@@ -13,7 +13,7 @@ This README covers running the project. The [wiki](https://github.com/Elhan-Sala
 | Backend | Java 21, Spring Boot 3.5, Spring Security with JWT in HttpOnly cookies |
 | Database | MongoDB 7 |
 | Frontend | React 19, TypeScript, Vite, Bootstrap |
-| Search sources | Jikan (anime, manga), IMDb API (movies, series), RAWG (games), Open Library (books), iTunes (music) |
+| Search sources | Jikan (anime, manga), TMDB (films, series), RAWG (games), Open Library (books), iTunes (music) |
 | Build and CI | Maven Wrapper, npm, Docker Compose, GitHub Actions |
 
 ## Repository layout
@@ -32,7 +32,7 @@ You need Docker with Compose v2.
 ```bash
 git clone https://github.com/Elhan-Salaji/Media-Tracker.git
 cd Media-Tracker
-cp backend/.env.example backend/.env    # fill in JWT_SECRET and RAWG_API_KEY
+cp backend/.env.example backend/.env    # fill in JWT_SECRET, TMDB_API_KEY and RAWG_API_KEY
 cd docker
 docker compose up -d --build
 ```
@@ -48,6 +48,7 @@ The backend refuses to start while a required value is missing.
 | Variable | Where you set it | Meaning |
 |---|---|---|
 | `JWT_SECRET` | `backend/.env` | Signs the access and refresh tokens. Generate one with `openssl rand -base64 48`. |
+| `TMDB_API_KEY` | `backend/.env` | Key for the film and series search, free at https://www.themoviedb.org/settings/api. Use the short API key, not the longer API Read Access Token. The backend only asks for it while film or series search is enabled. |
 | `RAWG_API_KEY` | `backend/.env` | Key for the game search, free at https://rawg.io/apidocs. The backend only asks for it while game search is enabled. |
 | `HTTP_USER_AGENT` | `backend/.env`, optional | User-Agent for the search APIs, for example `MediaTracker/1.1.1 (you@example.com)`. Open Library asks for a contact e-mail and lets identified clients send three requests per second instead of one. Without it the backend sends its version and the repository URL. |
 | `VITE_API_BASE_URL` | `frontend/.env` for `npm run dev`, your shell or `docker/.env` for Docker Compose | Address of the backend as the browser sees it. Defaults to `http://localhost:8080`. Vite writes it into the bundle at build time, so a change needs a new build. |

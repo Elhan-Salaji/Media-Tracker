@@ -60,5 +60,8 @@ rawg:
 openlibrary:
   base-url: https://openlibrary.org
 
-imdb:
-  base-url: https://api.imdbapi.dev
+tmdb:
+  base-url: https://api.themoviedb.org/3
+  image-base-url: https://image.tmdb.org/t/p/w500
+  # No default. While movie or series search is enabled, the backend refuses to start without TMDB_API_KEY.
+  api-key: ${TMDB_API_KEY}

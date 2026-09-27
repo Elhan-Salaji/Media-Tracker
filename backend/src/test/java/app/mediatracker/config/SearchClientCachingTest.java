@@ -1,6 +1,6 @@
 package app.mediatracker.config;
 
-import app.mediatracker.feature.search.client.movie_and_series.IMDbClient;
+import app.mediatracker.feature.search.client.movie_and_series.TmdbClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ import static org.mockito.Mockito.when;
 /**
  * Verifies that the search clients answer a repeated query from the cache.
  *
- * The test builds a small Spring context with {@link CacheConfig} and a real {@link IMDbClient},
+ * The test builds a small Spring context with {@link CacheConfig} and a real {@link TmdbClient},
  * whose WebClient talks to a mocked {@link ExchangeFunction}. Counting the exchanges shows how
  * often the client went out to the external API.
  */
@@ -40,7 +40,7 @@ import static org.mockito.Mockito.when;
 class SearchClientCachingTest {
 
     private static final String JSON_RESPONSE = """
-            { "titles": [ { "id": "tt1190634", "primaryTitle": "The Boys" } ] }
+            { "results": [ { "id": 1396, "name": "Breaking Bad" } ] }
             """;
 
     @Configuration
@@ -53,13 +53,14 @@ class SearchClientCachingTest {
         }
 
         @Bean
-        IMDbClient imdbClient(ExchangeFunction exchangeFunction) {
-            return new IMDbClient(WebClient.builder().exchangeFunction(exchangeFunction), "https://api.imdbapi.dev");
+        TmdbClient tmdbClient(ExchangeFunction exchangeFunction) {
+            return new TmdbClient(WebClient.builder().exchangeFunction(exchangeFunction),
+                    "https://api.themoviedb.org/3", "test-tmdb-key");
         }
     }
 
     @Autowired
-    private IMDbClient imdbClient;
+    private TmdbClient tmdbClient;
 
     @Autowired
     private ExchangeFunction exchangeFunction;
@@ -81,8 +82,8 @@ class SearchClientCachingTest {
 
     @Test
     void repeatedSearch_isServedFromCache() {
-        String first = imdbClient.searchMovieAndSeries("the boys");
-        String second = imdbClient.searchMovieAndSeries("the boys");
+        String first = tmdbClient.searchSeries("breaking bad");
+        String second = tmdbClient.searchSeries("breaking bad");
 
         assertEquals(JSON_RESPONSE, first);
         assertEquals(first, second);
@@ -91,8 +92,17 @@ class SearchClientCachingTest {
 
     @Test
     void differentQuery_callsTheApiAgain() {
-        imdbClient.searchMovieAndSeries("the boys");
-        imdbClient.searchMovieAndSeries("the office");
+        tmdbClient.searchSeries("breaking bad");
+        tmdbClient.searchSeries("the office");
+
+        verify(exchangeFunction, times(2)).exchange(any());
+    }
+
+    @Test
+    void movieAndSeriesSearch_useSeparateCaches() {
+        // The same term on both endpoints must reach TMDB twice, once per type.
+        tmdbClient.searchMovie("naruto");
+        tmdbClient.searchSeries("naruto");
 
         verify(exchangeFunction, times(2)).exchange(any());
     }
@@ -102,7 +112,7 @@ class SearchClientCachingTest {
         List<String> cacheNames = Arrays.stream(new Class<?>[]{
                         app.mediatracker.feature.search.client.anime.JikanAnimeClient.class,
                         app.mediatracker.feature.search.client.manga.JikanMangaClient.class,
-                        app.mediatracker.feature.search.client.movie_and_series.IMDbClient.class,
+                        app.mediatracker.feature.search.client.movie_and_series.TmdbClient.class,
                         app.mediatracker.feature.search.client.game.RawgClient.class,
                         app.mediatracker.feature.search.client.book.OpenLibraryClient.class,
                         app.mediatracker.feature.search.client.music.ItunesClient.class})
@@ -112,7 +122,7 @@ class SearchClientCachingTest {
                 .flatMap(annotation -> Arrays.stream(annotation.value()))
                 .toList();
 
-        assertEquals(6, cacheNames.size(), "each of the six search clients caches its search");
+        assertEquals(7, cacheNames.size(), "each search client caches its search, TMDB once per type");
         cacheNames.forEach(name -> assertNotNull(cacheManager.getCache(name), "missing cache " + name));
     }
 }
