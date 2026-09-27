@@ -5,7 +5,7 @@ import app.mediatracker.feature.search.client.anime.JikanAnimeClient;
 import app.mediatracker.feature.search.client.book.OpenLibraryClient;
 import app.mediatracker.feature.search.client.game.RawgClient;
 import app.mediatracker.feature.search.client.manga.JikanMangaClient;
-import app.mediatracker.feature.search.client.movie_and_series.IMDbClient;
+import app.mediatracker.feature.search.client.movie_and_series.TmdbClient;
 import app.mediatracker.feature.search.client.music.ItunesClient;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpServer;
@@ -109,10 +109,10 @@ class SearchClientRequestHeadersTest {
     @Test
     void movieAndSeriesClient_sendsExpectedHeaders() {
         // Arrange
-        IMDbClient client = new IMDbClient(sharedBuilder(), baseUrl());
+        TmdbClient client = new TmdbClient(sharedBuilder(), baseUrl(), "test-tmdb-key");
 
         // Act
-        client.searchMovieAndSeries("naruto");
+        client.searchMovie("naruto");
 
         // Assert
         assertExpectedHeaders();
