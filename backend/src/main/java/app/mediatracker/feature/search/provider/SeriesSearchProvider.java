@@ -1,11 +1,12 @@
 package app.mediatracker.feature.search.provider;
 
-import app.mediatracker.feature.search.client.movie_and_series.IMDbClient;
+import app.mediatracker.feature.search.client.movie_and_series.TmdbClient;
 import app.mediatracker.feature.search.core.dto.SearchResult;
 import app.mediatracker.feature.search.core.provider.SearchProvider;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
@@ -18,18 +19,21 @@ import java.util.Map;
 @Component
 @ConditionalOnProperty(prefix = "search.series", name = "enabled", havingValue = "true")
 public class SeriesSearchProvider implements SearchProvider {
-    private final IMDbClient imdb;
+    private final TmdbClient tmdb;
     private final ObjectMapper mapper;
+    private final String imageBaseUrl;
 
     /**
      * Constructor with dependencies.
      *
-     * @param imdb   HTTP client for the IMDb API
-     * @param mapper Jackson Mapper for parsing JSON responses
+     * @param tmdb         HTTP client for the TMDB API
+     * @param mapper       Jackson Mapper for parsing JSON responses
+     * @param imageBaseUrl prefix for the relative poster paths TMDB returns
      */
-    public SeriesSearchProvider(IMDbClient imdb, ObjectMapper mapper) {
-        this.imdb = imdb;
+    public SeriesSearchProvider(TmdbClient tmdb, ObjectMapper mapper, @Value("${tmdb.image-base-url}") String imageBaseUrl) {
+        this.tmdb = tmdb;
         this.mapper = mapper;
+        this.imageBaseUrl = imageBaseUrl;
     }
 
     /**
@@ -43,7 +47,7 @@ public class SeriesSearchProvider implements SearchProvider {
     }
 
     /**
-     * Searches for series via the IMDb API.
+     * Searches for series via the TMDB API.
      *
      * Behavior: Parses the response, extracts relevant fields, and returns
      * a normalized list. Errors are logged and result in an empty list.
@@ -55,32 +59,32 @@ public class SeriesSearchProvider implements SearchProvider {
     @Override
     public List<SearchResult> search(String searchQuery, int limit) {
         try {
-            String json = imdb.searchMovieAndSeries(searchQuery);
-            JsonNode titles = mapper.readTree(json).path("titles");
+            String json = tmdb.searchSeries(searchQuery);
+            JsonNode results = mapper.readTree(json).path("results");
 
             List<SearchResult> searchResults = new ArrayList<>();
-            for(JsonNode seriesNode : titles) {
-                if(seriesNode.path("type").asText().equals("tvSeries")) {
-                    String id    = seriesNode.path("id").asText();
-                    String title = seriesNode.path("primaryTitle").asText("");
-                    String img   = seriesNode.path("primaryImage").path("url").asText("");
-                    String url   = "https://www.imdb.com/title/" + id;
+            for (JsonNode seriesNode : results) {
+                String id     = seriesNode.path("id").asText();
+                String title  = seriesNode.path("name").asText("");
+                String poster = seriesNode.path("poster_path").asText("");
+                String img    = poster.isBlank() ? "" : imageBaseUrl + poster;
+                String url    = "https://www.themoviedb.org/tv/" + id;
 
-                    // optional extras in meta
-                    Map<String,Object> meta = new HashMap<>();
-                    if (seriesNode.hasNonNull("startYear")) meta.put("year", seriesNode.get("startYear").asInt());
+                // optional extras in meta
+                Map<String, Object> meta = new HashMap<>();
+                String firstAired = seriesNode.path("first_air_date").asText("");
+                if (firstAired.length() >= 4) meta.put("year", Integer.parseInt(firstAired.substring(0, 4)));
 
-                    searchResults.add(SearchResult.builder()
-                            .type("series")
-                            .id(id)
-                            .title(title)
-                            .imageUrl(img)
-                            .sourceUrl(url)
-                            .meta(meta.isEmpty() ? null : meta)
-                            .build());
+                searchResults.add(SearchResult.builder()
+                        .type("series")
+                        .id(id)
+                        .title(title)
+                        .imageUrl(img)
+                        .sourceUrl(url)
+                        .meta(meta.isEmpty() ? null : meta)
+                        .build());
 
-                    if (searchResults.size() >= limit) break;
-                }
+                if (searchResults.size() >= limit) break;
             }
 
             return searchResults;

@@ -38,5 +38,9 @@ search:
 rawg:
   api-key: test-rawg-key
 
+tmdb:
+  api-key: test-tmdb-key
+  image-base-url: https://image.tmdb.org/t/p/w500
+
 web-client:
   user-agent: "MediaTracker/test (+https://github.com/Elhan-Salaji/Media-Tracker)"
