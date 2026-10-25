@@ -1,0 +1,29 @@
+# Secret scanning in CI (#108). The default rule set covers the common key and
+# token shapes; the allowlist below keeps a full-history scan from reporting the
+# two values that are already burned.
+[extend]
+useDefault = true
+
+[allowlist]
+description = """
+The JWT signing secret and the RAWG API key were committed as defaults in
+backend/src/main/resources/application.yml while the project lived on HdM
+GitLab. #4 removed the defaults, both values were rotated at the provider, and
+#108 records the decision to leave the history as it is instead of rewriting it.
+The commits below carry those burned values and are not findings.
+"""
+commits = [
+  "f1b8dd3c7f6f87cd3674e352eed69a36ae3ce153", # add: GameSearch #36 — RAWG key as a default
+  "6a0156b664034946c1fd91c1cb6ae8e60ae79fdf", # refactor: Finalize cleanup and security improvements #57 — JWT secret
+  "5769339d0c5d6aaca7a7f9b33edc40c8759e49d0", # refactor: JavaDoc to English — rewrote the line around the secret
+  "62aa32655c2859952588cc6f2df4167c2387cd41", # align main with develop
+  "6b874367884641f41f2d6fc9bc7ce33966fe74e2", # Revert "Merge branch 'feature/frontend' into 'main'"
+  "22c226b1265ccd195e4cafad03a5e3bd7e768b03", # fix: drop the secret defaults from application.yml #4
+]
+
+# The example files hold variable names without values, and the test
+# configuration holds deliberate dummies.
+paths = [
+  '''\.env\.example$''',
+  '''backend/src/test/resources/application\.yml$''',
+]

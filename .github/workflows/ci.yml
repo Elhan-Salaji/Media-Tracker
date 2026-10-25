@@ -56,6 +56,25 @@ jobs:
         working-directory: backend
         run: ./mvnw validate
 
+  secret-scan:
+    name: Secret Scan
+    runs-on: ubuntu-latest
+    steps:
+      # gitleaks reads the commits themselves, so it needs the history rather
+      # than the single commit actions/checkout fetches by default.
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      # Rules and the allowlist for the burned values sit in .gitleaks.toml.
+      # The action is free for a personal repository; under an organisation
+      # account it would need a GITLEAKS_LICENSE secret.
+      - name: Scan for committed secrets
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_ENABLE_COMMENTS: false
+
   # ==========================================
   # TEST
   # ==========================================
