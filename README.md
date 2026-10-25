@@ -55,6 +55,14 @@ The backend refuses to start while a required value is missing.
 
 The `.env` files stay out of git. `backend/.env.example` and `frontend/.env.example` list the variables.
 
+### Adding a new API key
+
+1. Name the variable `<PROVIDER>_API_KEY`, for example `TMDB_API_KEY`.
+2. Read it in `backend/src/main/resources/application.yml` as `${<PROVIDER>_API_KEY}`, with no default after a colon. A default there is a key in the repository.
+3. Add the variable to `backend/.env.example` with an empty value and the address where the key is free, and give it a row in the table above.
+4. Put a dummy value in `backend/src/test/resources/application.yml`, so the tests run without a real key.
+5. Never put a key in a `VITE_` variable. Vite writes those into the frontend bundle, where every visitor can read them.
+
 ## Run it from source
 
 You need Java 21 or newer, Node 24 and Docker for the database.

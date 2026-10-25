@@ -12,5 +12,11 @@ target/
 node_modules/
 
 # Docker
-*.env
 db/
+
+# Secrets. Only the examples belong in git, every real env file stays local.
+# A pattern without a slash matches at any depth, so these three lines cover
+# backend/, frontend/ and docker/ alike.
+.env
+.env.*
+!.env.example
