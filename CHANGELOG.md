@@ -16,6 +16,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - **Anime search:** The WebClient sent `Accept-Encoding: gzip` with every request, and Jikan answers any `Accept-Encoding` header with 504, so the anime search came back empty. The shared WebClient requests no compression, and all search sources receive uncompressed responses. Jikan's manga endpoint answered every request with 504 on 2026-09-14, with or without the header (#81).
 - **Initial search:** On load the backend passed the empty search term of the main page to Jikan as `q=`, which Jikan answers with 504. The anime client leaves an empty term out. A search the backend rejects or never answers shows an error message in place of an empty list (#17).
 
+### Security
+- **Secrets:** `.gitignore` keeps every `.env` and `.env.*` file out of git and lets only the `.env.example` files through, so a production env file can no longer slip in through a name the old `*.env` pattern missed. A new Secret Scan job runs gitleaks on every pull request and push, with `.gitleaks.toml` allowlisting the commits that carry the two credentials from before the move to GitHub. The README describes how to add a new API key, and `frontend/.env.example` states that no key belongs in a `VITE_` variable, where Vite would write it into the browser bundle (#108).
+
 ## [1.1.1] - 2026-09-14
 
 ### Added
