@@ -33,6 +33,7 @@ public class CacheConfig {
     public static final String RAWG_SEARCH = "rawgSearch";
     public static final String OPEN_LIBRARY_SEARCH = "openLibrarySearch";
     public static final String ITUNES_SEARCH = "itunesSearch";
+    public static final String MUSICBRAINZ_SEARCH = "musicBrainzSearch";
 
     /**
      * One hour keeps a title released today findable on the same day.
@@ -40,10 +41,16 @@ public class CacheConfig {
     static final Duration DEFAULT_TTL = Duration.ofHours(1);
 
     /**
-     * Jikan allows three requests per second and 60 per minute, the tightest limit of all
-     * sources, and anime and manga catalogues change slowly. Its caches keep entries longer.
+     * Jikan allows three requests per second and 60 per minute, and anime and manga catalogues
+     * change slowly. Its caches keep entries longer.
      */
     static final Duration JIKAN_TTL = Duration.ofHours(6);
+
+    /**
+     * MusicBrainz allows one request per second, the tightest limit of all sources, and albums
+     * rarely change once they are listed. Its cache keeps entries as long as Jikan's.
+     */
+    static final Duration MUSICBRAINZ_TTL = Duration.ofHours(6);
 
     /**
      * Upper bound per cache, so a burst of distinct queries cannot grow the heap without limit.
@@ -62,6 +69,7 @@ public class CacheConfig {
         register(cacheManager, RAWG_SEARCH, DEFAULT_TTL);
         register(cacheManager, OPEN_LIBRARY_SEARCH, DEFAULT_TTL);
         register(cacheManager, ITUNES_SEARCH, DEFAULT_TTL);
+        register(cacheManager, MUSICBRAINZ_SEARCH, MUSICBRAINZ_TTL);
         return cacheManager;
     }
 

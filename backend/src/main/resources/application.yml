@@ -49,8 +49,8 @@ web-client:
 jikan:
   base-url: https://api.jikan.moe/v4
 
-itunes:
-  base-url: https://itunes.apple.com
+musicbrainz:
+  base-url: https://musicbrainz.org/ws/2
 
 rawg:
   base-url: https://rawg.io/api
