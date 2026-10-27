@@ -19,6 +19,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ### Security
 - **Secrets:** `.gitignore` keeps every `.env` and `.env.*` file out of git and lets only the `.env.example` files through, so a production env file can no longer slip in through a name the old `*.env` pattern missed. A new Secret Scan job runs gitleaks on every pull request and push, with `.gitleaks.toml` allowlisting the commits that carry the two credentials from before the move to GitHub. The README describes how to add a new API key, and `frontend/.env.example` states that no key belongs in a `VITE_` variable, where Vite would write it into the browser bundle (#108).
+- **Search icon:** The Material Symbols stylesheet from `fonts.googleapis.com` is gone, and the one icon the app uses ships as an inline SVG in the navbar. A page view no longer sends the visitor's IP address to Google, which LG München I (3 O 17493/20) held to violate the GDPR without consent (#110).
 
 ## [1.1.1] - 2026-09-14
 
