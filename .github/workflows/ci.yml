@@ -70,7 +70,7 @@ jobs:
       # The action is free for a personal repository; under an organisation
       # account it would need a GITLEAKS_LICENSE secret.
       - name: Scan for committed secrets
-        uses: gitleaks/gitleaks-action@v2
+        uses: gitleaks/gitleaks-action@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITLEAKS_ENABLE_COMMENTS: false
